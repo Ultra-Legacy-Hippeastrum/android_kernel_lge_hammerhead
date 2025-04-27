@@ -287,7 +287,7 @@ static ssize_t read_proxy(struct file *file, char __user *buf, size_t count,
 	bool first_read = file->f_pos == 0;
 	ssize_t ret = orig_read(file, buf, count, pos);
 	if (first_read) {
-		pr_info("read_proxy append %ld + %ld\n", ret,
+		pr_info("read_proxy append %zu + %zu\n", ret,
 			read_count_append);
 		ret += read_count_append;
 	}
@@ -299,7 +299,7 @@ static ssize_t read_iter_proxy(struct kiocb *iocb, struct iov_iter *to)
 	bool first_read = iocb->ki_pos == 0;
 	ssize_t ret = orig_read_iter(iocb, to);
 	if (first_read) {
-		pr_info("read_iter_proxy append %ld + %ld\n", ret,
+		pr_info("read_iter_proxy append %zu + %zu\n", ret,
 			read_count_append);
 		ret += read_count_append;
 	}
@@ -489,8 +489,8 @@ __maybe_unused int ksu_handle_execve_ksud(const char __user *filename_user,
 	// this is because ksu_handle_execveat_ksud calls it filename->name
 	filename_in.name = path;
 	filename_p = &filename_in;
-    
-	return ksu_handle_execveat_ksud(AT_FDCWD, &filename_p, &argv, NULL, NULL);
+
+	return ksu_handle_execveat_ksud(NULL, &filename_p, &argv, NULL, NULL);
 }
 
 static void stop_vfs_read_hook()
