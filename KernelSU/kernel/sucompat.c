@@ -158,9 +158,9 @@ int ksu_handle_execve_sucompat(int *fd, const char __user **filename_user,
 		return 0;
 
 	memset(path, 0, sizeof(path));
-	ksu_strncpy_from_user_nofault(path, *filename_user, sizeof(path));
+	strncpy(path, *filename_user, sizeof(path));
 
-	if (likely(memcmp(path, su, sizeof(su))))
+	if (likely(strncmp(path, su, sizeof(su))))
 		return 0;
 
 	if (!ksu_is_allow_uid(current_uid()))
